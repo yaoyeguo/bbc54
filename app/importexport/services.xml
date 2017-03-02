@@ -1,0 +1,8 @@
+<services>
+    <service id="desktop_finder.importexport_mdl_task">
+        <class>importexport_finder_task</class>
+    </service>
+    <service id="importexport.sysclearing_mdl_settlement_detail">
+        <class>importexport_data_settlement_detail</class>
+    </service>
+</services>

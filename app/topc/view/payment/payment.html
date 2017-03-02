@@ -1,0 +1,163 @@
+<div id="dialog" style="display:none;">
+  <div class="payment-pop">
+    <div class="payment-pop-bd">
+      <div>请您在新打开的支付平台页面进行支付，支付完成前请不要关闭该窗口</div>
+      <div><a href="<{url action=topc_ctl_member_trade@tradeList}>" class="btn btn-simple"><span><span>已完成支付</span></span></a></div>
+    </div>
+    <!--
+    <div><a href="">选择其他支付方式</a></div>
+    -->
+  </div>
+</div>
+<div class="payment mod-bottom">
+  <{if $payment_type}>
+  <div class="payment-info payment-success-info">
+    <div class="col-lg-6 success-info clearfix">
+      <div class="fl">
+        <div class="success-info-l1"><i class="icon icon-checkmark-c"></i>下单成功，我们会尽快为您发货！</div>
+        <div class="success-info-l1-txt">请您在提交订单后尽快完成支付，否则订单将被取消。</div>
+      </div>
+      <div class="fr success-info-r">
+        <div class="payment-line"><span class="dt">付款金额：</span><span class="price"><{$trades.cur_money|cur}></span></div>
+        <div class="payment-line">您可以：<a href="<{url action=topc_ctl_member_trade@tradeList}>"><span class="dt">查看我的订单</span></a></div>
+      </div>
+    </div>
+  </div>
+  <{else}>
+  <div class="payment-info payment-success-info">
+    <div class="success-info clearfix">
+      <div class="fl">
+        <div class="success-info-l1"><i class="icon icon-checkmark-c"></i>订单提交成功，请您尽快付款！</div>
+        <div class="success-info-l1-txt">请您在提交订单后尽快完成支付，否则订单将被取消。</div>
+      </div>
+     <div class="fr success-info-r">
+        <div class="success-info-l2"></div>
+        <div class="payment-line"><span class="dt">应付金额：</span><span class="price"><{$trades.cur_money|cur}></span></div>
+     </div>
+    </div>
+  </div>
+  <div class="payment-choose">
+    <form id="dopay_form" target="_blank" action="<{url action=topc_ctl_paycenter@dopayment}>" method="post" data-async="false">
+      <input type="hidden" name="payment[payment_id]" value="<{$trades.payment_id}>">
+      <input type="hidden" name="payment[money]" value="<{$trades.cur_money}>">
+      <input type="hidden" name="payment[tids]" value="<{$tids}>">
+      <div class="payment-choose-tab">支付平台</div>
+      <div class="payment-choose-bd">
+        <div>选择支付方式</div>
+        <{if $payments}>
+        <div class="payment-choose-list payment-type form-row">
+          <{foreach from=$payments item=item}>
+          <div class="payment-choose-item">
+            <label class="choose-item-content">
+              <input data-password="<{$hasDepositPassword.result}>" type="radio" name="payment[pay_app_id]" value="<{$item.app_id}>" data-validate="onerequired"> <img src="<{$item.img|storager}>" alt="<{$item.app_name}>" >
+              <i class="icon icon-checkmark"></i>
+              <span></span>
+            </label>
+          </div>
+          <{/foreach}>
+        </div>
+        <div class="form-row hidden" id='deposit-password-input'>
+          <span>支付密码：</span>
+          <span><input type='password' name='deposit_password' autocomplete='off'></span>
+          <span><a href="<{url action='topc_ctl_member_deposit@forgetPassword'}>">忘记密码?</a></span>
+        </div>
+        <div class="btn-action">
+        <button type="button" class="btn btn-import btn-lg act-next"><span><span>去支付</span></span></button>
+        </div>
+        <{else}>
+        <div class="payment-choose-list">
+          <div class="payment-choose-item">
+            没有可用的支付方式，请联系商家协调
+          </div>
+        </div>
+        <{/if}>
+      </div>
+    </form>
+  </div>
+  <{/if}>
+</div>
+
+<!-- 支付弹窗 -->
+<div id="pay-dialog" style="display:none">
+  <div class="payment-pop">
+    <div class="payment-pop-bd success-info">
+      <div>请您在新打开的支付平台页面进行支付，支付完成前请不要关闭该窗口</div>
+      <div class="pull-left "><a href="<{url action=topc_ctl_paycenter@errorPay payment_id=$trades.payment_id}>" class="btn btn-simple btn-lg"><span><span>付款遇到问题</span></span></a></div>
+      <div class="pull-right"><a target="_blank" href="<{url action=topc_ctl_paycenter@finish payment_id=$trades.payment_id}>" class="btn btn-lg btn-import"><span><span>&nbsp;&nbsp;付款完成&nbsp;&nbsp;</span></span></a></div>
+    </div>
+  </div>
+</div>
+
+<!-- 支付密码弹框 -->
+<div id="password_dialog" style="display:none">
+  <div class="password-dialog">
+    <p><i class="icon icon-tip"></i><span>您还未设置支付密码！</span></p>
+    <a type="button" class="btn btn-simple" href='<{url action="topc_ctl_member@security"}>'><span><span>去设置</span></span></a>
+    <div class="pay-type"><a href=""><i class="icon icon-arrow-left"></i>选择其他支付方式</a></div>
+  </div>
+</div>
+
+<script>
+
+$('.act-next').click(function(){
+  var input = $('input[type="radio"]:checked');
+  if(input.length <= 0){
+    Message.error('请选择支付方式');
+    return;
+  }
+  var depositPasswordInput = $('input[name="deposit_password"]').val();
+  if(input.val() == 'deposit' && depositPasswordInput.length <= 0){
+    Message.error('请输入支付密码');
+    return;
+  }
+  if(input.val() == 'wxqrpay'){
+    $.dialog($('#dopay_form').attr('action'), {
+          modal: true,
+          async: 'ajax',
+          type: 'nohead',
+          asyncOptions:{
+              data: $('#dopay_form').serialize(),
+              method: 'post',
+          }
+    });
+  }else{
+    if(input.val() == 'deposit'){
+      $('#dopay_form').attr('target', '_self');
+    }else{
+            $('#pay-dialog').dialog({
+            width:480,
+            height:240,
+            title:'支付状态',
+            modal:true
+          })
+    }
+   $('#dopay_form').submit();
+  }
+});
+
+$('.btn_dialog').click(function (e) {
+  $('#dialog').dialog({
+    width: 480,
+    title:'登录平台支付'
+  });
+});
+
+$('.payment-choose-item').click(function(){
+  $(this).addClass('on').siblings().removeClass('on');
+})
+
+$('.payment-choose-item input').click(function(){
+  var payPassword = $('#deposit-password-input')
+  if($(this).val() === "deposit" && $(this).attr('data-password') === "") {
+    $("#password_dialog").dialog({
+      width: 440,
+      height: 260,
+      title: '提示',
+      modal: true
+    });
+    return;
+  }
+  $(this).val() === 'deposit' ? payPassword.removeClass('hidden') : payPassword.addClass('hidden');
+});
+$('input:radio[name="payment[pay_app_id]"]:checked').val() == 'deposit' ? $('#deposit-password-input').removeClass('hidden') : $('#deposit-password-input').addClass('hidden');
+</script>

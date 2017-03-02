@@ -1,0 +1,153 @@
+<{if $type =='mobile' || $type =='email'}>
+<div class="signup-flow">
+    <div class="signup-flow-title"><{t}>找回密码流程<{/t}></div>
+    <ul class="signup-flow-list">
+    	<li><{t}>1选择找回方式<{/t}><span class="arrow"></span></li>
+        <li class="on"><{t}>2验证身份<{/t}><span class="arrow"></span></li>
+        <li><{t}>3设置新密码<{/t}><span class="arrow"></span></li>
+    </ul>
+</div>
+<div class="form-box signup-box" id="login-box">
+	<div class="header">忘记密码-验证身份</div>
+	<form action="<{url action=topshop_ctl_find@checkFindInfo}>" method="post" class="bg-white" role="form" data-validate-onsuccess="ajaxSubmit">
+    <input type="hidden" value="<{$type}>" name="type" />
+	<div class="body">
+	<div class="form-group">
+        <label for="imgcode" class="control-label">图形验证码：</label>
+        <span class="form-act clearfix">
+            <input type="text" name="imgcode" id="img-code" value="" class="input-st form-control fl" placeholder="请输入图片验证码">
+            <img align="absmiddle" class="auto-change-verify-handle" id="membervocde" src="<{url action=toputil_ctl_vcode@gen_vcode key=topshop_bind}>" alt="验证码" width="100" height="30">
+            <p class="inline auto-change-verify-handle"><sapn>看不清？</span><a href="javascript:void(0);">换一张</a></p>
+        </span>
+    </div>
+    <{if $type == 'email'}>
+	    <div class="form-group">
+	        <label for="mobile" class="control-label">绑定的邮箱：</label>
+	        <input type="text" name="email" id="email" class="form-control" placeholder="已验证的邮箱" required data-validate-email data-validate-remote-url="<{url action=topshop_ctl_find@isAuth type=$type}>"  data-validate-remote-message="此邮箱地址未认证，请换一个重试">
+	    </div>
+	    <{else}>
+	    <div class="form-group">
+	        <label for="mobile" class="control-label">绑定的手机号：</label>
+	        <input type="text" name="mobile" id="mobile" class="form-control" placeholder="已验证的手机号码" maxlength="11" required data-validate-mobile data-validate-remote-url="<{url action=topshop_ctl_find@isAuth type=$type}>"  data-validate-remote-message="此手机号码未认证，请换一个重试">
+	    </div>
+    <{/if}>
+	
+    <div class="form-group">
+        <label for="find_code" class="control-label">验证码：</label>
+        <div class="clearfix">
+            <div class="col-sm-8 error-remind">
+            <{if $type == 'email'}>
+            <input type="text" name="find_code" id="find_code" class="form-control" placeholder="邮箱收到的验证码" maxlength="11" required>
+            <{else}>
+            <input type="text" name="find_code" id="find_code" class="form-control" placeholder="短信收到的验证码" maxlength="11" required>
+    		<{/if}>
+            </div>
+            <div class="col-sm-4"><button class="btn btn-warning auth-code" type="button" >获取验证码</button></div>
+        </div>
+    </div>
+    
+    <div class="cl"></div>
+	</div>
+	<div class="footer">
+        <p>
+            <button type="submit" class="btn bg-teal btn-block btn-lg">提交</button>
+        </p>
+        <p>
+            <a href="<{url action=topshop_ctl_passport@signin}>" class="text-center">返回登录 ></a>
+        </p>
+        <p>如果没有验证过手机号码或邮箱，请联系客服找回密码</p>
+    </div>
+	</form>
+</div>
+<{else}>
+<div class="text-center"><span>参数错误，返回<a href="<{url action=topshop_ctl_find@index}>">上一步</a></span></div>
+<{/if}>
+<script>
+//更换图形验证码
+$('.auto-change-verify-handle').on('click',function(){
+	getImgCode();
+})
+function getImgCode(){
+	
+	var url = $('#membervocde').attr('src');
+	 var random = +new Date;
+	 var urlrandom = url.match(/\b_=([\d]+)\b/);
+	    if(urlrandom) {
+	        url = url.replace(urlrandom[1], random);
+	    }
+	    else {
+	        url += (url.indexOf('?') > -1 ? '&' : '?') + '_=' + random;
+	    }
+	    $('#membervocde').attr('src', url);
+	    return false;
+}
+
+//获取手机验证码
+    var btn = $('.auth-code');
+    var type = '<{$type}>';
+    var countdown = 120, t;
+    function setTime(val){
+        
+        t = setTimeout(function() { 
+            setTime(val) 
+            },1000);
+        
+        if(countdown == 0){
+            btn.removeAttr("disabled");
+            btn.html('重新获取验证码');
+            countdown = 120; 
+            clearTimeout(t);
+        }else{
+            btn.attr("disabled", true); 
+            btn.html(countdown+"s后重新获取验证码");
+            countdown --;
+            
+        }
+        
+    }
+    btn.on('click',function(){
+        var authInfo; 
+        var imgcode = $('#img-code').val();
+        if(type == 'email'){
+        	authInfo = $('#email').val();
+        }else{
+        	authInfo = $('#mobile').val();
+        }
+        $.ajax({
+            'url':'<{url action=topshop_ctl_find@send}>',
+            'data': 'auth_info='+authInfo+'&type='+type+'&imgcode='+imgcode+'&imagevcodekey=topshop_bind',
+            'dataType':'json',
+            'type':'POST',
+            'success':function(rs){
+                if(rs.error) {
+                    $('#messagebox').message(rs.message);
+                    $('#img-code').val("").focus();
+                    getImgCode();
+                    return;
+                }
+                if(rs.success) {
+                    $('#messagebox').message(rs.message, 'success');
+                    setTime(this);
+                }
+            }
+        });
+        
+    })
+
+    function ajaxSubmit(e) {
+        var form = e.target;
+        e.preventDefault();
+        $.post(form.action, $(form).serialize(), function(rs) {
+            if(rs.error) {
+                $('#messagebox').message(rs.message);
+                return;
+            }
+            if(rs.success) {
+                $('#messagebox').message(rs.message, 'success');
+            }
+            if(rs.redirect) {
+                setTimeout(function(){location.href=rs.redirect;}, 1000);
+            }
+        });
+    }
+</script>

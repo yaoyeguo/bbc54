@@ -1,0 +1,51 @@
+<div class="summary-outbox">
+  <ul class="summary">
+    <li>
+      <div class="dt del"><{if $activityDetail}><del>价格：</del><{else}>价格：<{/if}></div>
+      <div class="dd"><span class="<{if !$activityDetail}>price<{/if}> action-update-price"><{if $activityDetail}><del><{$item.price|cur}></del><{else}><{$item.price|cur}><{/if}></span></div>
+    </li>
+    <!-- 活动价，单品活动促销 -->
+    <{if $activityDetail}>
+    <li>
+      <div class="dt red"><{$activityDetail.activity_info.activity_tag}>价：</div>
+      <div class="dd"><span class="price"><{$activityDetail.activity_price|cur}></span></div>
+    </li>
+    <{/if}>
+
+    <{if $promotionDetail}>
+    <li class="activity">
+      <div class="dt">优惠信息：</div>
+      <div class="dd">
+        <{foreach from=$promotionDetail item=promotionDetail name=name}>
+        <a href="<{url action=topc_ctl_promotion@getPromotionItem promotion_id=$promotionDetail.promotion_id}>" class="activity-txt"><span class="label-danger"><{$promotionDetail.promotion_tag}></span>
+            <{$promotionDetail.promotion_name}></a>
+        <{/foreach}>
+        <{if $promotion_count>1}>
+        <div class="activity-more">
+          <div class="more">共<{$promotion_count}>条促销活动 <i class="icon icon-arrow-down-b"></i></div>
+         </div>
+        <{/if}>
+     </div>
+    </li>
+    <{/if}>
+  </ul>
+  <div class="goods-qrcode"><img src="<{$item.qrCodeData}>"><br>手机购买</div>
+</div>
+<ul class="goods-other-info">
+  <li>
+    <span>销量：<em><{$item.sold_quantity|default:'0'}></em> 件</span>
+  </li>
+  <li>
+    <span>商品评分：<em><{$shopDsrData.countDsr.tally_dsr}></em> 分</span>
+    <!-- <span>
+      <a href="#" class="icon icon-star"></a>
+      <a href="#" class="icon icon-star"></a>
+      <a href="#" class="icon icon-star"></a>
+      <a href="#" class="icon icon-star"></a>
+      <a href="#" class="icon icon-star disabled"></a>
+    </span> -->
+  </li>
+  <li>
+    <span>商品评论：<em><{$item.rate_count|default:"0"}></em> 条</span>
+  </li>
+</ul>

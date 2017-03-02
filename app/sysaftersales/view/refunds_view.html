@@ -1,0 +1,77 @@
+<div class="tableform">
+<div class="division">
+    <h5>明细</h5>
+    <table width="100%">
+      <tr>
+        <th><{t}>退款类型：<{/t}></th>
+        <{if $refunds_type == '0' }>
+        <td>售后退款</td>
+        <{else}>
+        <td>取消订单退款</td>
+        <{/if}>
+        <{if $refunds_type == '0' }>
+        <th><{t}>售后单号：<{/t}></th>
+        <td><{$aftersales_bn}></td>
+        <{else}>
+        <th><{t}>取消订单号：<{/t}></th>
+        <td><{$tid}></td>
+        <{/if}>
+      </tr>
+      <tr>
+        <th><{t}>退款方式：<{/t}></th>
+        <td>线下退款</td>
+        <th><{t}>退款单所有商家：<{/t}></th>
+        <td><{$shop_id|shopname}></td>
+      </tr>
+      <tr>
+        <th><{t}>订单金额：<{/t}></th>
+        <td>
+          <em class="red"><{$order_price|cur}> (积分抵扣金额：<{$points_fee|cur}>)</em>
+        </td>
+        <th><{t}>商家退款：<{/t}></th>
+        <td>
+          <em class="red"><{$total_price|cur}> ( 包含积分抵钱：<{$points_fee|cur}>)</em>
+        </td>
+      </tr>
+      <tr>
+        <th><{t}>实需退款：<{/t}></th>
+        <td colspan="3">
+          <em class="red"><{$refund_fee|cur}>(商家退款-积分抵钱 [<{$total_price|cur}> - <{$points_fee|cur}>])</em>
+        </tr>
+      </table>
+  </div>
+  
+  <div class="division">
+    <h5>退款</h5>
+    <table width="100%">
+      <tr>
+        <th><{t}>退款方式：<{/t}></th>
+        <td><em class="red">*</em>线下退款</td>
+        <th><{t}>实需退款：<{/t}></th>
+        <td>
+          <em class="red"><{$refund_fee|cur}></em>
+        </td>
+      </tr>
+      <{if($status == 1)}>
+      <tr>
+        <th><{t}>退款银行：<{/t}></th>
+        <td ><em class="red">*</em><{$refunds_view.refund_bank}></td>
+        <th><{t}>退款帐号：<{/t}></th>
+        <td><em class="red">*</em><{$refunds_view.refund_account}></td>
+      </tr>
+      <tr>
+        <th><{t}>收款银行：<{/t}></th>
+        <td><em class="red">*</em><{$refunds_view.receive_bank}></td>
+        <th><{t}>收款帐号：<{/t}></th>
+        <td><em class="red">*</em><{$refunds_view.receive_account}></td>
+      </tr>
+      <tr>
+        <th><{t}>退款人：<{/t}></th>
+        <td><em class="red">*</em><{$refunds_view.refund_people}></td>
+        <th><{t}>收款人：<{/t}></th>
+        <td><em class="red">*</em><{$refunds_view.beneficiary}></td>
+      </tr>
+      <{/if}>
+    </table>
+  </div>
+  </div>

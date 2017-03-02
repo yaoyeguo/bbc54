@@ -1,0 +1,14 @@
+<desktop>
+
+    <permissions>
+        <permission id="aftersales" display='true' workground='systrade.workground.trades'>售后列表</permission>
+    </permissions>
+
+    <workground name="交易" id="systrade.workground.trades" controller="admin_trade" action="index" order='80'>
+        <menugroup name='申请售后'>
+            <menu controller='list' action='index' permission='aftersales' display='true' order='10'>售后申请列表</menu>
+            <menu controller='refunds' action='index' permission='aftersales' display='true' order='10'>退款申请</menu>
+        </menugroup>
+    </workground>
+
+</desktop>

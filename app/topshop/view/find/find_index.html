@@ -1,0 +1,27 @@
+<div class="signup-flow">
+    <div class="signup-flow-title"><{t}>找回密码流程<{/t}></div>
+    <ul class="signup-flow-list">
+    	<li class="on"><{t}>1选择找回方式<{/t}><span class="arrow"></span></li>
+        <li><{t}>2验证身份<{/t}><span class="arrow"></span></li>
+        <li><{t}>3设置新密码<{/t}><span class="arrow"></span></li>
+    </ul>
+</div>
+<div class="form-box signup-box" id="login-box">
+	<div class="header">忘记密码-选择找回方式</div>
+	<div class="body">
+	<form>
+		<div class="form-group">
+			<a href="<{url action=topshop_ctl_find@firstStep type=mobile}>" class="btn btn-primary text-center btn-block btn-lg">通过手机号码找回</a>
+		</div>
+		<div class="form-group">
+			<a href="<{url action=topshop_ctl_find@firstStep type=email}>" class="btn btn-primary text-center btn-block btn-lg">通过邮箱地址找回</a>
+		</div>
+		<div class="footer">
+	        <p>
+	            <a href="<{url action=topshop_ctl_passport@signin}>" class="text-center">返回登录 ></a>
+	        </p>
+	        <p>请选择已通过验证的方式找回密码<!-- 从未验证过的请联系客服找回密码 --></p>
+    	</div>
+	</form>
+	</div>
+</div>

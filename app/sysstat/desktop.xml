@@ -1,0 +1,42 @@
+<desktop>
+
+	<permissions>
+        <permission id="operatingSurvey" display='true' parent='0' workground='sysstat.wrokground.analysis'>经营概况</permission>
+		<permission id="transactionData" display='true' parent='0' workground='sysstat.wrokground.analysis'>销售情况</permission>
+        <permission id="collectlist" display='true' parent='0' workground='sysstat.wrokground.analysis'>收藏情况</permission>
+        <permission id="userlist" display='true' parent='0' workground='sysstat.wrokground.analysis'>会员排行</permission>
+
+	</permissions>
+
+	<workground name="报表" id="sysstat.wrokground.analysis" controller="admin_tradeData" action="dataAnalysis" order="60">
+		<menugroup name="经营概况">
+            <menu controller='admin_operating' action='index' permission='operatingSurvey' display='true' order='10'>经营概况</menu>
+        </menugroup>
+
+        <menugroup name="销售情况">
+			<menu controller='admin_tradeData' action='dataAnalysis' permission='transactionData' display='true' order='10'>交易数据统计
+			</menu>
+            <menu controller='admin_tradeData' action='index' permission='transactionData' display='false' order='20'>浏览原始数据
+            </menu>
+
+            <menu controller='admin_storelist' action='index' permission='transactionData' display='true' order='10'>店铺数据统计</menu>
+            <menu controller='admin_storelist' action='dataShow' permission='transactionData' display='false' order='20'>浏览原始数据</menu>
+
+            <menu controller='admin_goodslist' action='index' permission='transactionData' display='true' order='10'>商品数据统计</menu>
+             <menu controller='admin_goodslist' action='dataShow' permission='transactionData' display='false' order='20'>浏览原始数据</menu>
+		</menugroup>
+
+        <menugroup name="收藏情况">
+            <menu controller='admin_collectionitem' action='index' permission='collectlist' display='true' order='10'>商品收藏统计</menu>
+            <menu controller='admin_collectionitem' action='dataShow' permission='collectlist' display='false' order='20'>浏览原始数据</menu>
+            <menu controller='admin_collectionshop' action='index' permission='collectlist' display='true' order='10'>店铺收藏统计</menu>
+            <menu controller='admin_collectionshop' action='dataShow' permission='collectlist' display='false' order='20'>浏览原始数据</menu>
+        </menugroup>
+
+        <menugroup name="会员情况">
+            <menu controller='admin_userlist' action='index' permission='userlist' display='true' order='10'>会员排行</menu>
+            <menu controller='admin_userlist' action='dataShow' permission='userlist' display='false' order='20'>浏览原始数据</menu>
+        </menugroup>
+
+	</workground>
+</desktop>

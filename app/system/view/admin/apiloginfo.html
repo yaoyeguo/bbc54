@@ -1,0 +1,48 @@
+<div class='division tableform'>
+  <table>
+    <tr>
+      <th>日志ID:</th>
+      <td><{$apilog_id}></td>
+    </tr>
+    <tr>
+      <th>msg_id:</th>
+      <td><{$msg_id}></td>
+    </tr>
+    <tr>
+      <th>创建时间:</th>
+      <td><{$calltime|cdate}></td>
+    </tr>
+    <tr>
+      <th>状态:</th>
+      <td><{if $status == 'success'}>成功<{elseif $status == 'running'}>运行中<{elseif $status =='fail'}>失败<{/if}></td>
+    </tr>
+    <tr>
+      <th>api方法名:</th>
+      <td><{$worker}></td>
+    </tr>
+    <tr>
+      <th>任务参数:</th>
+      <td><pre><{$params}></pre></td>
+    </tr>
+    <tr>
+      <th>返回数据:</th>
+      <td><pre><{$result}></pre></td>
+    </tr>
+    <tr>
+      <th>同步类型:</th>
+      <td><{$api_type}></td>
+    </tr>
+    <tr>
+      <th>最后更新时间:</th>
+      <td><{$last_modify|cdate}></td>
+    </tr>
+  </table>
+  <div class='table-action'>
+    <{button class='btn-secondary' type="button"  label="关闭"}>
+  </div>
+</div>
+<script>
+  $$('.btn-secondary').addEvent('click', function(){
+    $$('.table-action')[0].getParent('.dialog').retrieve('instance').close();
+  });
+</script>

@@ -1,0 +1,106 @@
+<div class="membercenter-box">
+  <div class="membercenter-box-hd">
+    <div class="membercenter-box-left">您好，<em><{if $userInfo.username}><{$userInfo.username}><{elseif $userInfo.login_account}><{$userInfo.login_account}><{elseif $userInfo.mobile}><{$userInfo.mobile}><{elseif $userInfo.email}><{$userInfo.email}><{/if}></em>，欢迎进入会员中心 <!-- <a href="<{url action=topc_ctl_member@seInfoSet}>">详细信息</a> --> &nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-medal orange"></i> <a href="<{url action=topc_ctl_member_experience@experience}>" class="orange"><{$userInfo.grade_name}></a></div>
+  </div>
+  <div class="membercenter-box-bd">
+    <{include file="topc/member/index/userdata.html"}>
+  </div>
+</div>
+
+<div class="membercenter-box-wrap">
+  <div class="membercenter-box">
+    <{include file="topc/member/index/tradelist.html"}>
+  </div>
+</div>
+
+<div class="membercenter-box">
+  <div class="section" data-toggle="switchable" data-switchable-config="{&quot;events&quot;:&quot;click&quot;}">
+    <div class="membercenter-tab">
+      <ul class="switchable-nav clearfix">
+        <li class="active" data-morelink="<{url action=topc_ctl_member@itemsCollect}>">收藏的商品</li>
+        <li data-morelink="<{url action=topc_ctl_member@shopsCollect}>">收藏的店铺</li>
+      </ul>
+      <div class="view-more">
+        <!--
+        <a href="<{url action=topc_ctl_member_trade@tradeList}>">查看全部收藏  &gt;</a>
+        -->
+      </div>
+    </div>
+    <div class="membercenter-box-bd membercenter-tab-con">
+      <div class="switchable-content">
+        <div style="display: block;">
+          <{include file="topc/member/index/itemscollect.html"}>
+        </div>
+        <div style="display: none;">
+          <{include file="topc/member/index/shopscollect.html"}>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  //商品收藏删除
+$('.favDel').on('click',function(){
+    if(confirm("确定要删除吗？")){
+        var url = "<{url action=topc_ctl_collect@ajaxFavDel}>";
+        var el = $(this),
+            itemId=$(this).attr("data-itemId");
+        if(itemId) {
+            $.post(url,'item_id='+itemId,function(rs){
+
+              if(rs.success){
+                el.parents('.membercenter-favorite-item').remove();
+                Message.success(rs.message);
+              }
+            });
+        }
+
+    }
+
+});
+
+//店铺收藏删除操作
+$('.favShopDel').on('click',function(){
+    if(confirm("确定要删除吗？")){
+
+        var url = "<{url action=topc_ctl_collect@ajaxFavshopDel}>";
+        var el = $(this),
+            shopId=$(this).attr("data-shopId");
+        if(shopId) {
+            $.post(url,'shop_id='+shopId,function(rs){
+
+              if(rs.success){
+                  el.parents('.membercenter-favorite-item').remove();
+                   Message.success(rs.message);
+              }
+            });
+        }
+    }
+
+});
+
+//订单状态tab切换
+$('.order-status-tab li').on('click', function() {
+  var status = $(this).attr('data-status');
+  $.post("<{url action=topc_ctl_member@tradeStatusList}>",'status='+status,function(rs){
+    $('.new-order-list').parent().css('display', 'block');
+    $('.new-order-list').html(rs);
+  });
+});
+
+//订单列表中支付按钮操作
+//$(".act-pay").on('click',function(e){
+//  e.preventDefault();
+//  $.post($("#payment_form").attr('action'), {tid: $(this).attr('href'), merge: false}, function(rs){
+//    var rs = $.parseJSON(rs)
+//    if( rs.error ){
+//      alert(rs.message)
+//    }
+//  if(rs.redirect) {
+//    location.href = rs.redirect;
+//  }
+//  })
+//})
+
+</script>

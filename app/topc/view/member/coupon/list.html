@@ -1,0 +1,60 @@
+<div class="membercenter-box">
+  <div class="membercenter-box-hd">
+    <div class="membercenter-box-left">我的优惠券</div>
+    <div class="membercenter-box-right">
+    <span class="num">共<em><{$count}></em>条记录</span>
+    <{pagers data=$pagers type="mini"}>
+  </div>
+  </div>
+  <div class="membercenter-box-bd nogap">
+    <table class="item-table table-address" width="100%">
+      <thead>
+        <tr>
+          <td>优惠券号码</td>
+          <td>面值</td>
+          <td>规则</td>
+          <td>店铺</td>
+          <td>有效期</td>
+          <td width="48">是否使用</td>
+        </tr>
+      </thead>
+      <tbody>
+        <{if !$count }>
+        <tr><td colspan="6" class="no-content">暂无优惠券</td></tr>
+        <{else}>
+        <{foreach from=$couponList item=item}>
+        <tr>
+          <td>
+            <{$item.coupon_code}>
+          </td>
+          <td>
+            <{$item.deduct_money|cur}>
+          </td>
+          <td>
+            <{$item.coupon_desc}>
+          </td>
+          <td>
+            <{$item.shop_id|shopname}>
+          </td>
+          <td>
+            <{$item.canuse_start_time|cdate}>
+            ~
+            <{$item.canuse_end_time|cdate}>
+          </td>
+          <td>
+            <{if $item.is_valid==1}>
+            <span class="green">有效</span>
+            <{elseif $item.is_valid == 2}>
+            <span class="red">失效</span>
+            <{else}>
+            <span class="gray">已使用</span>
+            <{/if}>
+          </td>
+        </tr>
+        <{/foreach}>
+        <{/if}>
+      </tbody>
+    </table>
+  </div>
+  <{pagers data=$pagers}>
+</div>

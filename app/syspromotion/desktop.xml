@@ -1,0 +1,22 @@
+<desktop>
+
+    <permissions>
+        <permission id="promotion" display='true' workground='syspromotion.workground.promotion'>营销管理</permission>
+        <permission id="activity" display='true' workground='syspromotion.workground.activity'>活动管理</permission>
+    </permissions>
+
+    <workground name="营销" id="syspromotion.workground.promotion" controller="admin_fullminus" action="index" order='50'>
+        <menugroup name='促销管理'>
+            <menu controller='admin_coupon' action='index' permission='promotion' display='true' order='10'>优惠券</menu>
+            <menu controller='admin_freepostage' action='index' permission='promotion' display='true' order='20'>免邮</menu>
+            <menu controller='admin_fulldiscount' action='index' permission='promotion' display='true' order='30'>满折</menu>
+            <menu controller='admin_fullminus' action='index' permission='promotion' display='true' order='40'>满减</menu>
+            <menu controller='admin_xydiscount' action='index' permission='promotion' display='true' order='50'>X件Y折</menu>
+            <menu controller='admin_package' action='index' permission='promotion' display='true' order='50'>组合促销</menu>
+        </menugroup>
+        <menugroup name='活动管理'>
+            <menu controller='admin_activity' action='index' permission='activity' display='true' order='10'>活动列表</menu>
+            <menu controller='admin_activity_register' action='index' permission='activity' display='true' order='20'>报名列表</menu>
+    </workground>
+
+</desktop>
