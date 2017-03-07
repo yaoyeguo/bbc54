@@ -26,4 +26,4 @@ define('CONFIG_DIR', ROOT_DIR.'/config');
 define('BOOT_DIR', ROOT_DIR.'/bootstrap');
 define('TMP_DIR', sys_get_temp_dir());
 
-
+define('DEV_CHECKDEMO', true);
